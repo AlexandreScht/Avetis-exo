@@ -1,46 +1,27 @@
 import hashPassword from "@/api/db/hashPassword.js"
 import BaseModel from "@/api/db/models/BaseModel.js"
-import PageModel from "@/api/db/models/PageModel.js"
+// import PageModel from "@/api/db/models/PageModel.js"
+import RoleModel from "@/api/db/models/RoleModel.js"
 
 class UserModel extends BaseModel {
   static tableName = "users"
 
+  static modifiers = {
+    paginate: (query, limit, page) =>
+      query.limit(limit).offset((page - 1) * limit),
+  }
+
   static relationMappings() {
     return {
-      posts: {
-        relation: BaseModel.HasManyRelation,
-        modelClass: PageModel,
+      role: {
+        relation: BaseModel.HasOneRelation,
+        modelClass: RoleModel,
+        filter: (query) => query.select("role"),
         join: {
           from: "users.id",
-          to: "pages.createdBy",
+          to: "user_role.usersId",
         },
       },
-      drafts: {
-        relation: BaseModel.HasManyRelation,
-        modelClass: PageModel,
-        join: {
-          from: "users.id",
-          to: "pages.createdBy",
-          modify: (query) => query.whereNull("publishedAt"),
-        },
-      },
-      publishedPosts: {
-        relation: BaseModel.HasManyRelation,
-        modelClass: PageModel,
-        join: {
-          from: "users.id",
-          to: "pages.createdBy",
-          modify: (query) => query.whereNotNull("publishedAt"),
-        },
-      },
-      // modify: {
-      //   relation: BaseModel.HasManyRelation,
-      //   modelClass: PageModel,
-      //   join: {
-      //     from: "users.id",
-      //     to: "pages.modifiedBy",
-      //   },
-      // },
     }
   }
   checkPassword = async (password) => {

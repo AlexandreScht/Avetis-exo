@@ -1,9 +1,9 @@
 import * as yup from "yup"
 
-const validate = ({ body, params, query }) => {
+const validate = ({ body, headers, query }) => {
   const validator = yup.object().shape({
     ...(body ? { body: yup.object(body).shape() } : {}),
-    ...(params ? { params: yup.object(params).shape() } : {}),
+    ...(headers ? { headers: yup.object(headers).shape() } : {}),
     ...(query ? { query: yup.object(query).shape() } : {}),
   })
 
@@ -11,10 +11,10 @@ const validate = ({ body, params, query }) => {
     const { req, res, next, logger } = ctx
 
     try {
-      const { body, params, query } = await validator.validate(
+      const { body, headers, query } = await validator.validate(
         {
           body: req.body,
-          params: req.params,
+          headers: req.headers,
           query: req.query,
         },
         { abortEarly: false }
@@ -22,7 +22,7 @@ const validate = ({ body, params, query }) => {
 
       ctx.locals = {
         body,
-        params,
+        headers,
         query,
       }
 

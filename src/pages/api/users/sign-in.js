@@ -1,5 +1,4 @@
 import config from "@/api/config.js"
-import sessionStorage from "@/web/sessionStorage.js"
 import UserModel from "@/api/db/models/UserModel.js"
 import RoleModel from "@/api/db/models/RoleModel.js"
 import slowDown from "@/api/middlewares/slowDown.js"
@@ -53,9 +52,8 @@ const handler = mw({
         config.security.jwt.secret,
         { expiresIn: config.security.jwt.expiresIn }
       )
-      sessionStorage(jwt)
 
-      res.send({ result: "connected" })
+      res.send({ result: "connected", token: jwt, expiresIn: "2 days" })
     },
   ],
 })

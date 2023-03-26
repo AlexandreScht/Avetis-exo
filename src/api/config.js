@@ -19,9 +19,6 @@ const config = {
       digest: "sha512",
       pepper: process.env.SECURITY_PASSWORD_PEPPER,
     },
-    session: {
-      localStorageKey: "my_blog_app_session",
-    },
   },
 }
 

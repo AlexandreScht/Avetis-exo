@@ -2,18 +2,23 @@ import * as yup from "yup"
 
 // generic
 export const boolValidator = yup.bool()
-export const stringValidator = yup.string()
 
 export const idValidator = yup.number().integer().min(1)
 
-// posts
-export const titleValidator = yup.string().min(1).max(300)
+export const stringValidator = yup.string()
 
-export const contentValidator = yup.string().min(1)
+// posts
+export const titleValidator = yup.string().min(1).max(255)
+
+export const contentValidator = yup.string()
+
+export const statusValidator = yup.string().min(1)
+
+export const uniqueStatusValidator = yup
+  .string()
+  .oneOf(["published"], "cannot put other status except published or nothing")
 // role
 export const roleValidator = yup.string().min(1)
-
-export const PermissionValidator = yup.number().integer().min(1)
 
 // users
 export const displayNameValidator = yup.string().min(1).max(255)

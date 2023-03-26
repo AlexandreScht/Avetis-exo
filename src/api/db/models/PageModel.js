@@ -11,18 +11,19 @@ class PageModel extends BaseModel {
 
   static relationMappings() {
     return {
-      creator: {
+      Creator: {
         relation: BaseModel.BelongsToOneRelation,
         modelClass: UserModel,
+        filter: (query) => query.select("id", "email", "firstName", "lastName"),
         join: {
           from: "pages.createdBy",
           to: "users.id",
-          modify: (query) => query.select("id", "firstName", "lastName"),
         },
       },
-      modified: {
-        relation: BaseModel.HasManyRelation,
+      ModifiedBy: {
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: UserModel,
+        filter: (query) => query.select("id", "email", "firstName", "lastName"),
         join: {
           from: "pages.modifiedBy",
           to: "users.id",
